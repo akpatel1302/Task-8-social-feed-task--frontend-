@@ -35,12 +35,12 @@ const router = createBrowserRouter([
   //   element: <PrivateRoute />,
   //   children: [
   //     {
-  //       path: "/contact",
-  //       element: <Contact />,
+  //       path: "/home",
+  //       element: <Home />,
   //     },
   //     {
   //       path: "*",
-  //       element: <Contact />,
+  //       element: <Home />,
   //     },
   //   ],
   // },

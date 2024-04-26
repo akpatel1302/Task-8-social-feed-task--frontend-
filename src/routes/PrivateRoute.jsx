@@ -1,8 +1,9 @@
+import Cookies from "js-cookie";
 import { Outlet, Navigate } from "react-router-dom";
-// import { useAuth } from "../auth/AuthWrapper";
 
 function PrivateRoutes() {
-    const token = true;
+  const token = Cookies.get("accessToken");
+  console.log(token, "pvtoken");
   return token ? <Outlet /> : <Navigate to="/signin" />;
 }
 

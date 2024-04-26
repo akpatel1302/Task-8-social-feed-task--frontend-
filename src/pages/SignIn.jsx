@@ -65,13 +65,20 @@ function SignInSide() {
   //   // Cookies.set("userData", JSON.stringify(userData.userData), { expires: 7 }); // Store user data for 7 days
   // };
 
-  const storeAccessToken = (accessToken) => {
-    // Store the access token in a cookie
-    Cookies.set("accessToken", accessToken, {
-      expires: 7, // Set the expiration to 7 days
-      sameSite: "strict", // Set the SameSite flag to 'strict'
-    });
-  };
+  // const storeAccessToken = (accessToken) => {
+  //   // Store the access token in a cookie
+  //   Cookies.set("accessToken", accessToken, {
+  //     expires: 7, // Set the expiration to 7 days
+  //     sameSite: "strict", // Set the SameSite flag to 'strict'
+  //   });
+  // };
+
+  function setCookie(cname, cvalue, exdays) {
+    const d = new Date();
+    d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+    let expires = "expires=" + d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+  }
 
   // const handleSubmit = async (event) => {
   //   event.preventDefault();
@@ -95,7 +102,7 @@ function SignInSide() {
       const verificationResponse = await login(formData);
       console.log(verificationResponse);
       if (verificationResponse.data.success) {
-        storeAccessToken(verificationResponse.data.data.accessToken);
+        setCookie("accessToken", verificationResponse.data.data.accessToken, 7);
         navigate("/home");
       } else {
         alert("Error verifying user: " + verificationResponse.data.error);
