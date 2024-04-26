@@ -5,6 +5,7 @@ import { signupApi } from "../api/SignupApi";
 export const store = configureStore({
   reducer: {
     [signupApi.reducerPath]: signupApi.reducer,
+
     // Add other reducers here if needed
   },
   middleware: (getDefaultMiddleware) =>

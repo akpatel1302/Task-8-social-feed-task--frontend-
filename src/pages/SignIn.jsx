@@ -13,6 +13,9 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
+import { useGetUserMutation } from "../api/SignupApi";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -36,14 +39,71 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function SignInSide() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
+function SignInSide() {
+  const [formData, setFormData] = React.useState({
+    email: "",
+    password: "",
+  });
+
+  const [login, { isLoading, isError, error }] = useGetUserMutation();
+  const navigate = useNavigate();
+
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
     });
+  };
+
+  // const storeUserData = (userData) => {
+  //   // Store the access token and user data in a cookie
+  //   Cookies.set("accessToken", userData.accessToken, {
+  //     expires: 7, // Set the expiration to 7 days
+  //     httpOnly: true, // Make the cookie HTTP-only
+  //     sameSite: "strict", // Set the SameSite flag to 'strict'
+  //   }); // Store access token for 7 days
+  //   // Cookies.set("userData", JSON.stringify(userData.userData), { expires: 7 }); // Store user data for 7 days
+  // };
+
+  const storeAccessToken = (accessToken) => {
+    // Store the access token in a cookie
+    Cookies.set("accessToken", accessToken, {
+      expires: 7, // Set the expiration to 7 days
+      sameSite: "strict", // Set the SameSite flag to 'strict'
+    });
+  };
+
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault();
+  //   try {
+  //     const verificationResponse = await login(formData);
+  //     if (verificationResponse.data.success) {
+  //       storeAccessToken(verificationResponse.data);
+  //       navigate("/home");
+  //     } else {
+  //       alert("Error verifying user: " + verificationResponse.data.error);
+  //     }
+  //   } catch (err) {
+  //     console.error("Error signing in:", err);
+  //     alert("An error occurred. Please try again later.");
+  //   }
+  // };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const verificationResponse = await login(formData);
+      console.log(verificationResponse);
+      if (verificationResponse.data.success) {
+        storeAccessToken(verificationResponse.data.data.accessToken);
+        navigate("/home");
+      } else {
+        alert("Error verifying user: " + verificationResponse.data.error);
+      }
+    } catch (err) {
+      console.error("Error signing in:", err);
+      alert("An error occurred. Please try again later.");
+    }
   };
 
   return (
@@ -96,6 +156,7 @@ export default function SignInSide() {
                 id="email"
                 label="Email Address"
                 name="email"
+                onChange={handleInputChange}
                 autoComplete="email"
                 autoFocus
               />
@@ -107,6 +168,7 @@ export default function SignInSide() {
                 label="Password"
                 type="password"
                 id="password"
+                onChange={handleInputChange}
                 autoComplete="current-password"
               />
               <FormControlLabel
@@ -130,6 +192,7 @@ export default function SignInSide() {
                 </Grid>
               </Grid>
               <Copyright sx={{ mt: 5 }} />
+              {isError && <div>Error: {JSON.stringify(error.data)}</div>}
             </Box>
           </Box>
         </Grid>
@@ -137,3 +200,5 @@ export default function SignInSide() {
     </ThemeProvider>
   );
 }
+
+export default SignInSide;
