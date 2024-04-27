@@ -1,10 +1,29 @@
-import Cookies from "js-cookie";
 import { Outlet, Navigate } from "react-router-dom";
 
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(";");
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == " ") {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
 function PrivateRoutes() {
-  const token = Cookies.get("accessToken");
-  console.log(token, "pvtoken");
-  return token ? <Outlet /> : <Navigate to="/signin" />;
+  const token = getCookie("accessToken");
+
+  if (!token) {
+    return <Navigate to="/signin" replace />;
+  }
+
+  return <Outlet />;
 }
 
 export default PrivateRoutes;
