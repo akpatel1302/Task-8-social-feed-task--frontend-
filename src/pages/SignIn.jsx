@@ -24,6 +24,7 @@ function SignInSide() {
     password: "",
   });
 
+  const [showPassword, setShowPassword] = React.useState(false);
   const [login, { isLoading, isError, error }] = useGetUserMutation();
   const navigate = useNavigate();
 
@@ -72,6 +73,10 @@ function SignInSide() {
     let expires = "expires=" + d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
   }
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   return (
     <ThemeProvider theme={createTheme()}>
@@ -145,8 +150,14 @@ function SignInSide() {
               {errors.password && <div>{errors.password.message}</div>}
 
               <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
+                control={
+                  <Checkbox
+                    value="allowExtraEmails"
+                    color="primary"
+                    onClick={togglePasswordVisibility}
+                  />
+                }
+                label="Show Password"
               />
               <Button
                 type="submit"
