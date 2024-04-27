@@ -5,7 +5,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-// import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -14,30 +13,10 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import { useGetUserMutation } from "../api/SignupApi";
-// import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Instagram
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
-// TODO remove, this demo shouldn't need to reset the theme.
-
-const defaultTheme = createTheme();
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
 
 function SignInSide() {
   const [formData, setFormData] = React.useState({
@@ -48,6 +27,23 @@ function SignInSide() {
   const [login, { isLoading, isError, error }] = useGetUserMutation();
   const navigate = useNavigate();
 
+  const validationSchema = Yup.object().shape({
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
+    password: Yup.string()
+      .required("Password is required")
+      .min(6, "Password must be at least 6 characters long"),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+  });
+
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
@@ -55,52 +51,9 @@ function SignInSide() {
     });
   };
 
-  // const storeUserData = (userData) => {
-  //   // Store the access token and user data in a cookie
-  //   Cookies.set("accessToken", userData.accessToken, {
-  //     expires: 7, // Set the expiration to 7 days
-  //     httpOnly: true, // Make the cookie HTTP-only
-  //     sameSite: "strict", // Set the SameSite flag to 'strict'
-  //   }); // Store access token for 7 days
-  //   // Cookies.set("userData", JSON.stringify(userData.userData), { expires: 7 }); // Store user data for 7 days
-  // };
-
-  // const storeAccessToken = (accessToken) => {
-  //   // Store the access token in a cookie
-  //   Cookies.set("accessToken", accessToken, {
-  //     expires: 7, // Set the expiration to 7 days
-  //     sameSite: "strict", // Set the SameSite flag to 'strict'
-  //   });
-  // };
-
-  function setCookie(cname, cvalue, exdays) {
-    const d = new Date();
-    d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
-    let expires = "expires=" + d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-  }
-
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault();
-  //   try {
-  //     const verificationResponse = await login(formData);
-  //     if (verificationResponse.data.success) {
-  //       storeAccessToken(verificationResponse.data);
-  //       navigate("/home");
-  //     } else {
-  //       alert("Error verifying user: " + verificationResponse.data.error);
-  //     }
-  //   } catch (err) {
-  //     console.error("Error signing in:", err);
-  //     alert("An error occurred. Please try again later.");
-  //   }
-  // };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const onSubmit = async (data) => {
     try {
-      const verificationResponse = await login(formData);
-      console.log(verificationResponse);
+      const verificationResponse = await login(data);
       if (verificationResponse.data.success) {
         setCookie("accessToken", verificationResponse.data.data.accessToken, 7);
         navigate("/home");
@@ -113,8 +66,15 @@ function SignInSide() {
     }
   };
 
+  function setCookie(cname, cvalue, exdays) {
+    const d = new Date();
+    d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+    let expires = "expires=" + d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+  }
+
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={createTheme()}>
       <Grid container component="main" sx={{ height: "100vh" }}>
         <CssBaseline />
         <Grid
@@ -153,10 +113,11 @@ function SignInSide() {
             <Box
               component="form"
               noValidate
-              onSubmit={handleSubmit}
+              onSubmit={handleSubmit(onSubmit)}
               sx={{ mt: 1 }}
             >
               <TextField
+                {...register("email")}
                 margin="normal"
                 required
                 fullWidth
@@ -167,7 +128,10 @@ function SignInSide() {
                 autoComplete="email"
                 autoFocus
               />
+              {errors.email && <div>{errors.email.message}</div>}
+
               <TextField
+                {...register("password")}
                 margin="normal"
                 required
                 fullWidth
@@ -178,6 +142,8 @@ function SignInSide() {
                 onChange={handleInputChange}
                 autoComplete="current-password"
               />
+              {errors.password && <div>{errors.password.message}</div>}
+
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
@@ -198,8 +164,9 @@ function SignInSide() {
                   </Link>
                 </Grid>
               </Grid>
-              <Copyright sx={{ mt: 5 }} />
-              {isError && <div>Error: {JSON.stringify(error.data)}</div>}
+              <Typography variant="body2" color="error">
+                {isError && <div>Error: {JSON.stringify(error.data)}</div>}
+              </Typography>
             </Box>
           </Box>
         </Grid>
