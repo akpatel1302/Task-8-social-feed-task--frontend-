@@ -19,11 +19,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 
 function SignInSide() {
-  const [formData, setFormData] = React.useState({
-    email: "",
-    password: "",
-  });
-
   const [showPassword, setShowPassword] = React.useState(false);
   const [login, { isLoading, isError, error }] = useGetUserMutation();
   const navigate = useNavigate();
@@ -34,7 +29,7 @@ function SignInSide() {
       .required("Email is required"),
     password: Yup.string()
       .required("Password is required")
-      .min(6, "Password must be at least 6 characters long"),
+      .min(8, "Password must be at least 8 characters long"),
   });
 
   const {
@@ -44,13 +39,6 @@ function SignInSide() {
   } = useForm({
     resolver: yupResolver(validationSchema),
   });
-
-  const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
 
   const onSubmit = async (data) => {
     try {
@@ -129,7 +117,6 @@ function SignInSide() {
                 id="email"
                 label="Email Address"
                 name="email"
-                onChange={handleInputChange}
                 autoComplete="email"
                 autoFocus
               />
@@ -144,7 +131,6 @@ function SignInSide() {
                 label="Password"
                 type="password"
                 id="password"
-                onChange={handleInputChange}
                 autoComplete="current-password"
               />
               {errors.password && <div>{errors.password.message}</div>}

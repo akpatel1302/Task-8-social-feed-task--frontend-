@@ -17,7 +17,6 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import { useSignupMutation } from "../api/SignupApi";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 
 function Copyright(props) {
   return (
@@ -50,7 +49,12 @@ function SignUp() {
     email: Yup.string()
       .email("Invalid email address")
       .required("Email is required"),
-    password: Yup.string().required("Password is required"),
+    password: Yup.string()
+      .required("Password is required")
+      .min(8, "Password must be at least 8 characters long"),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref("password"), null], "Passwords must match")
+      .required("Please confirm your password"),
   });
 
   const {
@@ -61,14 +65,6 @@ function SignUp() {
     resolver: yupResolver(validationSchema),
   });
 
-  const [, setFormData] = useState({
-    firstname: "",
-    lastname: "",
-    username: "",
-    email: "",
-    password: "",
-    isPrivate: false,
-  });
   const [signup, { isLoading, isError, error }] = useSignupMutation();
 
   const togglePasswordVisibility = () => {
@@ -76,17 +72,14 @@ function SignUp() {
   };
 
   const onSubmit = async (data) => {
+    if (data.password !== data.confirmPassword) {
+      alert("Passwords do not match. Please confirm your password.");
+      return;
+    }
+
     try {
       data.isPrivate = false;
       await signup(data);
-      setFormData({
-        firstname: "",
-        lastname: "",
-        username: "",
-        email: "",
-        password: "",
-        isPrivate: false,
-      });
       navigate("/signin");
     } catch (err) {
       console.error("Error signing up:", err);
@@ -190,6 +183,25 @@ function SignUp() {
                 {errors.password && (
                   <div style={{ color: "red" }}>{errors.password.message}</div>
                 )}
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  {...register("confirmPassword")}
+                  required
+                  fullWidth
+                  name="confirmPassword"
+                  label="Confirm Password"
+                  type="password"
+                  id="confirmPassword"
+                  autoComplete="new-password"
+                />
+                {errors.confirmPassword && (
+                  <div style={{ color: "red" }}>
+                    {errors.confirmPassword.message}
+                  </div>
+                )}
+              </Grid>
+              <Grid item xs={12}>
                 <FormControlLabel
                   control={
                     <Checkbox
