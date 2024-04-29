@@ -18,7 +18,30 @@ export const signupApi = createApi({
         body,
       }),
     }),
+    createPosts: builder.mutation({
+      query: ({ postData, accessToken }) => ({
+        url: "/posts/create-post",
+        method: "POST",
+        body: postData,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }),
+    }),
+    fetchPosts: builder.mutation({
+      query: (params) => ({
+        url: "/posts/get-feed-posts?",
+        method: "GET",
+        params,
+      }),
+    }),
   }),
 });
 
-export const { useSignupMutation, useGetUserMutation } = signupApi;
+export const {
+  useSignupMutation,
+  useGetUserMutation,
+  useCreatePostsMutation,
+  useFetchPostsMutation,
+} = signupApi;
