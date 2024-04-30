@@ -5,6 +5,7 @@ import Signup from "./pages/Signup";
 import { RouterProvider } from "react-router-dom";
 import PrivateRoute from "./routes/PrivateRoute";
 import PublicRoutes from "./routes/PublicRoute";
+import Profile from "./pages/Profile";
 import {
   createBrowserRouter,
   //   createRoutesFromElements,
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
       {
         path: "/home",
         element: <Home />,
+      },
+      {
+        path: "/profile",
+        element: <Profile />,
       },
       {
         path: "*",

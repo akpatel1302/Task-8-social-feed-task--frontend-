@@ -40,6 +40,42 @@ export const signupApi = createApi({
         },
       }),
     }),
+    fetchUser: builder.query({
+      query: ({ data, accessToken }) => {
+        console.log('from api--->',accessToken);
+        return {
+          url: "/users/get-user",
+          method: "GET",
+          body: data,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        };
+      },
+    }),
+    fetchUserProfile: builder.query({
+      query: ({ body, accessToken }) => ({
+        url: "/users/get-users-profile?",
+        method: "GET",
+        body,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }),
+    }),
+    UpdateUserProfile: builder.mutation({
+      query: ({ body, accessToken }) => ({
+        url: "/users/update-user",
+        method: "PUT",
+        body,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }),
+    }),
   }),
 });
 
@@ -47,5 +83,8 @@ export const {
   useSignupMutation,
   useGetUserMutation,
   useCreatePostsMutation,
-  useFetchPostsQuery
+  useFetchPostsQuery,
+  useFetchUserProfileQuery,
+  useUpdateUserProfileMutation,
+  useFetchUserQuery,
 } = signupApi;

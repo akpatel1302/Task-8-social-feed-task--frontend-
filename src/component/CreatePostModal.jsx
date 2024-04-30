@@ -10,12 +10,12 @@ import {
 
 const CreatePostModal = ({ onClose, onSubmit }) => {
   const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({ title, content, image });
+    onSubmit({ title, description, image });
   };
 
   const handleImageChange = (e) => {
@@ -35,11 +35,11 @@ const CreatePostModal = ({ onClose, onSubmit }) => {
             margin="normal"
           />
           <TextField
-            label="Content"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
+            label="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             multiline
-            rows={4}
+            minRows={4}
             fullWidth
             margin="normal"
           />

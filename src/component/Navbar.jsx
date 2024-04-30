@@ -56,7 +56,7 @@ const Navbar = () => {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            Instagram clone
+            Instagram Clone
           </Typography>
           <Button color="inherit" component={Link} to="/home">
             Home

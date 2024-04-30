@@ -1,5 +1,3 @@
-// ************************allnew display data
-
 import React, { useState, useEffect } from "react";
 import { useFetchPostsQuery, useCreatePostsMutation } from "../api/SignupApi";
 import CreatePostModal from "../component/CreatePostModal";
@@ -11,6 +9,8 @@ import {
   Typography,
   makeStyles,
   Button,
+  CardActionArea,
+  CardMedia,
 } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
@@ -27,6 +27,13 @@ const useStyles = makeStyles((theme) => ({
   },
   createPostButton: {
     marginBottom: theme.spacing(2),
+  },
+  media: {
+    height: 200,
+    objectFit: "cover",
+  },
+  actionArea: {
+    padding: theme.spacing(2),
   },
 }));
 
@@ -68,6 +75,7 @@ const Home = () => {
 
   const handleCreatePost = async (postData) => {
     try {
+      console.log("-----> post data", postData);
       postData.isPrivate = false;
       const accessToken = getCookie("accessToken");
       if (authenticateToken(accessToken)) {
@@ -106,14 +114,24 @@ const Home = () => {
       )}
       <Grid container spacing={3}>
         {data?.data?.data?.map((post) => (
-          <Grid item xs={12} sm={6} md={4} key={post._id}>
+          <Grid item xs={12} sm={12} md={12} key={post._id}>
             <Card className={classes.card}>
-              <CardContent className={classes.cardContent}>
-                <Typography gutterBottom variant="h5" component="h2">
-                  {post.title}
-                </Typography>
-                <Typography>{post.content}</Typography>
-              </CardContent>
+              <CardActionArea>
+                <CardMedia
+                  component="img"
+                  alt="Post Image"
+                  image={post.image}
+                  className={classes.media}
+                />
+                <CardContent className={classes.cardContent}>
+                  <Typography gutterBottom variant="h5" component="h2">
+                    {post.title}
+                  </Typography>
+                  <Typography gutterBottom variant="body2" component="p">
+                    {post.description}
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
             </Card>
           </Grid>
         ))}

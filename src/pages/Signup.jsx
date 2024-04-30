@@ -17,6 +17,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import { useSignupMutation } from "../api/SignupApi";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Copyright(props) {
   return (
@@ -41,6 +43,10 @@ const defaultTheme = createTheme();
 function SignUp() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = React.useState(false);
+
+  const notify = (message) => {
+    toast(message);
+  };
 
   const validationSchema = Yup.object({
     firstname: Yup.string().required("First Name is required"),
@@ -81,8 +87,10 @@ function SignUp() {
       data.isPrivate = false;
       await signup(data);
       navigate("/signin");
+      notify("Signup success");
     } catch (err) {
       console.error("Error signing up:", err);
+      notify("Signup failed");
       alert("Error signing up: " + (err.data || "Unknown error"));
     }
   };
@@ -218,11 +226,13 @@ function SignUp() {
               type="submit"
               fullWidth
               variant="contained"
+              onClick={notify}
               sx={{ mt: 3, mb: 2 }}
               disabled={isLoading}
             >
               {isLoading ? "Loading..." : "Sign Up"}
             </Button>
+            <ToastContainer />
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link to={"/signin"} variant="body2">
