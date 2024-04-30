@@ -42,7 +42,7 @@ export const signupApi = createApi({
     }),
     fetchUser: builder.query({
       query: ({ data, accessToken }) => {
-        console.log('from api--->',accessToken);
+        console.log("from api--->", accessToken);
         return {
           url: "/users/get-user",
           method: "GET",
