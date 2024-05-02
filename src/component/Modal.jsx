@@ -29,9 +29,9 @@ const Modal = ({ children, open, onClose }) => {
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>
         Edit Profile
-        <IconButton aria-label="close" onClick={onClose}>
+        {/* <IconButton aria-label="close" onClick={onClose}>
           <CloseIcon />
-        </IconButton>
+        </IconButton> */}
       </DialogTitle>
       <DialogContent>{children}</DialogContent>
     </Dialog>

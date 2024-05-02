@@ -66,12 +66,12 @@ const CreatePostModal = ({ onClose, onSubmit }) => {
           <Button type="submit" color="primary">
             Submit
           </Button>
-        </form>
-      </DialogContent>
-      <DialogActions>
         <Button onClick={onClose} color="primary">
           Cancel
         </Button>
+        </form>
+      </DialogContent>
+      <DialogActions>
       </DialogActions>
     </Dialog>
   );

@@ -93,6 +93,9 @@ const EditProfileModal = ({ user, onClose }) => {
             <Button type="submit" color="primary">
               Save
             </Button>
+            <Button onClick={onClose} color="primary">
+              Cancel
+            </Button>
           </DialogActions>
         </form>
       </DialogContent>
