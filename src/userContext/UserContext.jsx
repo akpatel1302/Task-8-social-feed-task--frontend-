@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 const Auth = createContext();
 
 // Create a useCookie hook
-export const useCookie = () => {
+const useCookie = () => {
   const context = useContext(Auth);
   return context;
 };

@@ -53,15 +53,18 @@ function getCookie(cname) {
 }
 
 // trying user auth
-const abcs = useCookie;
+// const abcs = useCookie;
 
-console.log(abcs);
+// console.log(abcs);
 
 function authenticateToken(accessToken) {
   return accessToken !== "";
 }
 
 const Home = () => {
+  const cookieValue = useCookie();
+
+  console.log(cookieValue);
   const classes = useStyles();
   const [showModal, setShowModal] = useState(false);
   const {

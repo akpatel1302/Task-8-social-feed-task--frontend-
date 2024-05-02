@@ -1,32 +1,3 @@
-// import { Link, useNavigate } from "react-router-dom";
-// import Cookies from "js-cookie";
-
-// const Navbar = () => {
-//   const navigate = useNavigate();
-
-//     const handleLogout = () => {
-//     Cookies.remove("accessToken");
-//     navigate("/login");
-//   };
-
-//   return (
-//     <nav>
-//       <ul>
-//         <li>
-//           <Link to="/home">Home</Link>
-//         </li>
-//         <li>
-//           <Link to="/profile">Profile</Link>
-//         </li>
-//       </ul>
-//       <button onClick={handleLogout}>Logout</button>
-//     </nav>
-//   );
-// };
-
-// export default Navbar;
-
-import React from "react";
 import { Link } from "react-router-dom";
 import { AppBar, Toolbar, Typography, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -39,6 +10,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+    textAlign: "left",
   },
 }));
 
@@ -47,8 +19,11 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    Cookies.remove("accessToken");
-    navigate("/login");
+    const validate = window.confirm("Are you sure you want to logout?");
+    if (validate) {
+      Cookies.remove("accessToken");
+      navigate("/login");
+    }
   };
 
   return (
