@@ -2,7 +2,15 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 import React from "react";
-import { Grid, Card, CardContent, Typography, CardActionArea, CardMedia,makeStyles } from "@material-ui/core";
+import {
+  Grid,
+  Card,
+  CardContent,
+  Typography,
+  CardActionArea,
+  CardMedia,
+  makeStyles,
+} from "@material-ui/core";
 import { useFetchImageQuery } from "../api/postApi";
 const PostCard = ({ post }) => {
   const useStyles = makeStyles((theme) => ({
@@ -18,6 +26,7 @@ const PostCard = ({ post }) => {
       flexGrow: 1,
     },
     createPostButton: {
+      marginTop: theme.spacing(2),
       marginBottom: theme.spacing(2),
     },
     media: {
@@ -36,7 +45,7 @@ const PostCard = ({ post }) => {
     refetch: refetchImage,
   } = useFetchImageQuery(post._id);
   // console.log(imageData)
-// post._id  
+  // post._id
 
   return (
     <Grid item xs={12} sm={12} md={12} key={post._id}>

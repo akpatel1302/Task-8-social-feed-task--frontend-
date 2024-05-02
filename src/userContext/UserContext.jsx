@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
     for (let i = 0; i < cookieString.length; i++) {
       const cookie = cookieString[i].trim();
       // Check if the cookie is the one you're looking for
-      if (cookie.startsWith("your_cookie_name=")) {
+      if (cookie.startsWith("accessToken")) {
         return cookie.split("=")[1];
       }
     }

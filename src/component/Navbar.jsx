@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    // width: "100%",
   },
   title: {
     flexGrow: 1,

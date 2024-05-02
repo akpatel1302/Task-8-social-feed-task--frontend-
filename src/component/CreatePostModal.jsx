@@ -9,20 +9,20 @@ import {
 } from "@material-ui/core";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import { makeStyles } from "@material-ui/core/styles";
+// import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles((theme) => ({
-  name: {
-    padding: theme.spacing(2),
-  },
-}));
+// const useStyles = makeStyles((theme) => ({
+//   name: {
+//     padding: theme.spacing(2),
+//   },
+// }));
 
 const schema = yup.object().shape({
   title: yup.string().required("Title is required"),
 });
 
 const CreatePostModal = ({ onClose, onSubmit }) => {
-  const classes = useStyles();
+  // const classes = useStyles();
   const { register, handleSubmit, errors } = useForm({
     validationSchema: schema,
   });
@@ -44,7 +44,7 @@ const CreatePostModal = ({ onClose, onSubmit }) => {
 
   return (
     <Dialog open={true} onClose={onClose}>
-      <DialogTitle className={classes.name}>Create Post</DialogTitle>
+      <DialogTitle>Create Post</DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit(handleFormSubmit)}>
           <TextField
