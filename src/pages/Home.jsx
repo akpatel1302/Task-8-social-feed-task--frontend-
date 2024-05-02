@@ -74,6 +74,7 @@ const Home = () => {
     data: postData,
     isLoading: postLoading,
     isError: postError,
+    refetch: refetchPosts,
   } = useFetchPostsQuery({
     page: 1,
     perPage: 20,
@@ -90,24 +91,20 @@ const Home = () => {
     refetch: refetchImage,
   } = useFetchImageQuery(postData?.data?.data[0]?._id);
 
+  // const post = postData.data.data;
+
+  // const result = post.map((post) => {
+  //   const postId = post._id;
+
+  //   return postId;
+  // });
+
+  console.log(postData?.data?.data?._id, "result");
+
   const [
     createPost,
     { isLoading: isCreatingPost, isError: isCreateError, error: createError },
-  ] = useCreatePostsMutation({
-    refetchQueries: [
-      {
-        query: useFetchPostsQuery,
-        variables: {
-          page: 1,
-          perPage: 20,
-          search: "",
-          isMyPostsOnly: false,
-          isPrivate: false,
-          accessToken: getCookie("accessToken"),
-        },
-      },
-    ],
-  });
+  ] = useCreatePostsMutation();
 
   const handleCreatePost = async (postData) => {
     try {
@@ -117,6 +114,7 @@ const Home = () => {
       if (authenticateToken(accessToken)) {
         await createPost(postData).unwrap();
         setShowModal(false);
+        refetchPosts();
       } else {
         console.error("Access token authentication failed");
       }
@@ -129,6 +127,7 @@ const Home = () => {
     if (!postLoading && !postError && postData) {
       console.log("Posts data:", postData.data.data);
       refetchImage(postData.data.data[0]._id);
+      // refetchImage(postData.data.data._id);
     }
   }, [postData, postLoading, postError, refetchImage]);
 
@@ -154,12 +153,13 @@ const Home = () => {
           <Grid item xs={12} sm={12} md={12} key={post._id}>
             <Card className={classes.card}>
               <CardActionArea>
-                <Typography gutterBottom variant="h5" component="h2">
+                {/* <Typography gutterBottom variant="h5" component="h2">
                   {post.userData.username}
-                </Typography>
+                </Typography> */}
                 <CardMedia
                   component="img"
                   alt="Post Image"
+                  // src={imageData?.imageData}
                   src={imageData?.imageData}
                   className={classes.media}
                 />

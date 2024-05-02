@@ -35,4 +35,4 @@ export const AuthProvider = ({ children }) => {
   return <Auth.Provider value={{ cookie }}>{children}</Auth.Provider>;
 };
 
-export default Auth;
+export default useCookie;

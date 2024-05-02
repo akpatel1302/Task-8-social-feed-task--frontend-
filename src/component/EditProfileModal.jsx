@@ -15,6 +15,7 @@ const EditProfileModal = ({ user, onClose }) => {
     register,
     handleSubmit,
     formState: { errors },
+    refetch: refetchUsers,
   } = useForm({
     defaultValues: {
       firstname: user.data.firstname,

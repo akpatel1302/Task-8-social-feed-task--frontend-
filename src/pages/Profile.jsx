@@ -1,13 +1,17 @@
 // --------------------------------------------- edit field
 import { useState } from "react";
-import { useFetchUserQuery } from "../api/userApi";
+import {
+  useFetchUserQuery,
+  useUpdateUserProfileMutation,
+} from "../api/userApi";
 import Navbar from "../component/Navbar";
 import EditProfileModal from "../component/EditProfileModal";
 
 const UserProfilePage = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [updateUserProfile] = useUpdateUserProfileMutation();
 
-  const { data: user, isLoading, isError, error } = useFetchUserQuery();
+  const { data: user, isLoading, isError, error, refetch:refetchUsers, } = useFetchUserQuery();
   // {
   // accessToken: Cookies.get("accessToken"),
   // }
@@ -18,6 +22,16 @@ const UserProfilePage = () => {
 
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
+  };
+
+  const handleUpdateProfile = async (updatedUserData) => {
+    try {
+      await updateUserProfile(updatedUserData).unwrap();
+      setIsEditModalOpen(false);
+      refetchUser(); 
+    } catch (error) {
+      console.error("Error updating user profile:", error);
+    }
   };
 
   if (isLoading) {
