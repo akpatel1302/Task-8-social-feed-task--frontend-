@@ -17,7 +17,7 @@ import {
   CardActionArea,
   CardMedia,
 } from "@material-ui/core";
-
+import Auth from "../userContext/UserContext";
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(3),
@@ -58,6 +58,11 @@ function getCookie(cname) {
   return "";
 }
 
+// trying user auth
+const abcs = Auth;
+
+console.log(abcs);
+
 function authenticateToken(accessToken) {
   return accessToken !== "";
 }
@@ -85,7 +90,6 @@ const Home = () => {
     refetch: refetchImage,
   } = useFetchImageQuery(postData?.data?.data[0]?._id);
 
-  console.log(imageData);
   const [
     createPost,
     { isLoading: isCreatingPost, isError: isCreateError, error: createError },
@@ -150,13 +154,15 @@ const Home = () => {
           <Grid item xs={12} sm={12} md={12} key={post._id}>
             <Card className={classes.card}>
               <CardActionArea>
+                <Typography gutterBottom variant="h5" component="h2">
+                  {post.userData.username}
+                </Typography>
                 <CardMedia
                   component="img"
                   alt="Post Image"
                   src={imageData?.imageData}
                   className={classes.media}
                 />
-                {console.log(imageData?.imageData)}
                 <CardContent className={classes.cardContent}>
                   <Typography gutterBottom variant="h5" component="h2">
                     {post.title}

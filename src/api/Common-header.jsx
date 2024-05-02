@@ -1,5 +1,5 @@
 import { fetchBaseQuery } from "@reduxjs/toolkit/query";
-
+import Auth from "../userContext/UserContext";
 function getCookie(cname) {
   let name = cname + "=";
   let decodedCookie = decodeURIComponent(document.cookie);
@@ -16,10 +16,11 @@ function getCookie(cname) {
   return "";
 }
 
- const baseQuery = fetchBaseQuery({
+const baseQuery = fetchBaseQuery({
   baseUrl: "http://localhost:5000",
   prepareHeaders: (headers) => {
     const token = getCookie("accessToken");
+    // const token = Auth();
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
     }
@@ -28,4 +29,4 @@ function getCookie(cname) {
   },
 });
 
-export default baseQuery
+export default baseQuery;

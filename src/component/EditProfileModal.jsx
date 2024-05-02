@@ -1,89 +1,3 @@
-// import React, { useState } from "react";
-// import { useUpdateUserProfileMutation } from "../api/userApi";
-// import Cookies from "js-cookie";
-// import Modal from "./Modal";
-// import { TextField, Button, DialogActions, DialogContent, DialogTitle } from "@material-ui/core";
-
-// const EditProfileModal = ({ user, onClose }) => {
-//   const [formData, setFormData] = useState({
-//     firstname: user.data.firstname,
-//     lastname: user.data.lastname,
-//     username: user.data.username,
-//     email: user.data.email,
-//   });
-
-//   const [updateUserProfile] = useUpdateUserProfileMutation();
-
-//   const handleInputChange = (e) => {
-//     setFormData((prevData) => ({
-//       ...prevData,
-//       [e.target.name]: e.target.value,
-//     }));
-//   };
-
-//   const handleSaveProfile = async () => {
-//     try {
-//       await updateUserProfile({
-//         body: formData,
-//         accessToken: Cookies.get("accessToken"),
-//       }).unwrap();
-//       onClose();
-//     } catch (error) {
-//       console.error("Error updating user profile:", error);
-//     }
-//   };
-
-//   return (
-//     <Modal open={true} onClose={onClose}>
-//       <DialogTitle>Edit Profile</DialogTitle>
-//       <DialogContent>
-//         <form onSubmit={handleSaveProfile}>
-//           <TextField
-//             label="First Name"
-//             name="firstname"
-//             value={formData.firstname}
-//             onChange={handleInputChange}
-//             fullWidth
-//             margin="normal"
-//           />
-//           <TextField
-//             label="Last Name"
-//             name="lastname"
-//             value={formData.lastname}
-//             onChange={handleInputChange}
-//             fullWidth
-//             margin="normal"
-//           />
-//           <TextField
-//             label="Username"
-//             name="username"
-//             value={formData.username}
-//             onChange={handleInputChange}
-//             fullWidth
-//             margin="normal"
-//           />
-//           <TextField
-//             label="Email"
-//             name="email"
-//             value={formData.email}
-//             onChange={handleInputChange}
-//             fullWidth
-//             margin="normal"
-//           />
-//           <DialogActions>
-//             <Button type="submit" color="primary">
-//               Save
-//             </Button>
-//           </DialogActions>
-//         </form>
-//       </DialogContent>
-//     </Modal>
-//   );
-// };
-
-// export default EditProfileModal;
-
-import React from "react";
 import { useForm } from "react-hook-form";
 import { useUpdateUserProfileMutation } from "../api/userApi";
 import Cookies from "js-cookie";
@@ -109,14 +23,16 @@ const EditProfileModal = ({ user, onClose }) => {
       email: user.data.email,
     },
   });
-
   const [updateUserProfile] = useUpdateUserProfileMutation();
 
   const onSubmit = async (data) => {
     try {
       console.log("-------data---->", data);
       await updateUserProfile({
-        body: data,
+        firstname: data.firstname,
+        lastname: data.lastname,
+        username: data.username,
+        email: data.email,
         accessToken: Cookies.get("accessToken"),
       }).unwrap();
       onClose();

@@ -1,30 +1,38 @@
-// import React from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
-// const UserContext = React.createContext();
+// Create a Auth
+const Auth = createContext();
 
-// export default UserContext;
-
-import React, { createContext, useContext } from "react";
-
-const UserContext = createContext();
-
-export const useUserContext = () => {
-  const context = useContext(UserContext);
+// Create a useCookie hook
+export const useCookie = () => {
+  const context = useContext(Auth);
   return context;
 };
 
-export const UserContextProvider = ({ children }) => {
-  const [user, setUser] = React.useState(null);
+// Create a AuthProvider component
+export const AuthProvider = ({ children }) => {
+  const [cookie, setCookie] = useState("");
 
-  const updateUser = (userData) => {
-    setUser(userData);
+  // Function to get the cookie
+  const getCookie = () => {
+    const cookieString = document.cookie.split(";");
+    for (let i = 0; i < cookieString.length; i++) {
+      const cookie = cookieString[i].trim();
+      // Check if the cookie is the one you're looking for
+      if (cookie.startsWith("your_cookie_name=")) {
+        return cookie.split("=")[1];
+      }
+    }
+    return "";
   };
 
-  return (
-    <UserContext.Provider value={{ user, updateUser }}>
-      {children}
-    </UserContext.Provider>
-  );
+  // Use effect to get the cookie when the component mounts
+  useEffect(() => {
+    const cookieValue = getCookie();
+    setCookie(cookieValue);
+  }, []);
+
+  return <Auth.Provider value={{ cookie }}>{children}</Auth.Provider>;
 };
 
-export default UserContext;
+export default Auth;

@@ -1,7 +1,6 @@
 // --------------------------------------------- edit field
 import { useState } from "react";
 import { useFetchUserQuery } from "../api/userApi";
-import Cookies from "js-cookie";
 import Navbar from "../component/Navbar";
 import EditProfileModal from "../component/EditProfileModal";
 
