@@ -1,66 +1,4 @@
-// import React, { useState } from "react";
-// import {
-//   Button,
-//   Dialog,
-//   DialogActions,
-//   DialogContent,
-//   DialogTitle,
-//   TextField,
-// } from "@material-ui/core";
-
-// const CreatePostModal = ({ onClose, onSubmit }) => {
-//   const [title, setTitle] = useState("");
-//   const [description, setDescription] = useState("");
-//   const [image, setImage] = useState(null);
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     onSubmit({ title, description, image });
-//   };
-
-//   const handleImageChange = (e) => {
-//     setImage(e.target.files[0]);
-//   };
-
-//   return (
-//     <Dialog open={true} onClose={onClose}>
-//       <DialogTitle>Create Post</DialogTitle>
-//       <DialogContent>
-//         <form onSubmit={handleSubmit}>
-//           <TextField
-//             label="Title"
-//             value={title}
-//             onChange={(e) => setTitle(e.target.value)}
-//             fullWidth
-//             margin="normal"
-//           />
-//           <TextField
-//             label="description"
-//             value={description}
-//             onChange={(e) => setDescription(e.target.value)}
-//             multiline
-//             minRows={4}
-//             fullWidth
-//             margin="normal"
-//           />
-//           <input type="file" onChange={handleImageChange} />
-//         </form>
-//       </DialogContent>
-//       <DialogActions>
-//         <Button onClick={onClose} color="primary">
-//           Cancel
-//         </Button>
-//         <Button onClick={handleSubmit} color="primary">
-//           Submit
-//         </Button>
-//       </DialogActions>
-//     </Dialog>
-//   );
-// };
-
-// export default CreatePostModal;
-
-import React from "react";
+import { useState } from "react";
 import {
   Button,
   Dialog,
@@ -71,7 +9,6 @@ import {
 } from "@material-ui/core";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import { Description } from "@material-ui/icons";
 
 const schema = yup.object().shape({
   title: yup.string().required("Title is required"),
@@ -81,9 +18,20 @@ const CreatePostModal = ({ onClose, onSubmit }) => {
   const { register, handleSubmit, errors } = useForm({
     validationSchema: schema,
   });
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const handleFormSubmit = (data) => {
-    onSubmit(data);
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("description", data.description);
+    formData.append("isPrivate", false);
+    formData.append("image", selectedImage);
+    onSubmit(formData);
+  };
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    setSelectedImage(file);
   };
 
   return (
@@ -94,32 +42,35 @@ const CreatePostModal = ({ onClose, onSubmit }) => {
           <TextField
             label="Title"
             name="title"
-            value={title}
-            inputRef={register}
-            error={!!errors.title}
-            helperText={errors.title && errors.title.message}
+            {...register("title")}
+            error={!!errors?.title}
+            helperText={errors?.title && errors?.title.message}
             fullWidth
             margin="normal"
           />
           <TextField
             label="Description"
             name="description"
-            value={description}
-            inputRef={register}
+            {...register("description")}
             multiline
             minRows={4}
             fullWidth
             margin="normal"
           />
-          <input type="file" />
+          <input
+            type="file"
+            accept="image/*"
+            {...register("image")}
+            onChange={handleImageUpload}
+          />
+          <Button type="submit" color="primary">
+            Submit
+          </Button>
         </form>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">
           Cancel
-        </Button>
-        <Button type="submit" color="primary">
-          Submit
         </Button>
       </DialogActions>
     </Dialog>

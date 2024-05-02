@@ -1,5 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { useFetchPostsQuery, useCreatePostsMutation } from "../api/SignupApi";
+// home.jsx  tdy
+import { useState, useEffect } from "react";
+import {
+  useFetchPostsQuery,
+  useCreatePostsMutation,
+  useFetchImageQuery,
+} from "../api/postApi";
 import CreatePostModal from "../component/CreatePostModal";
 import Navbar from "../component/Navbar";
 import {
@@ -60,7 +65,11 @@ function authenticateToken(accessToken) {
 const Home = () => {
   const classes = useStyles();
   const [showModal, setShowModal] = useState(false);
-  const { data, isLoading, isError, error } = useFetchPostsQuery({
+  const {
+    data: postData,
+    isLoading: postLoading,
+    isError: postError,
+  } = useFetchPostsQuery({
     page: 1,
     perPage: 20,
     search: "",
@@ -68,18 +77,41 @@ const Home = () => {
     isPrivate: false,
     accessToken: getCookie("accessToken"),
   });
+
+  const {
+    data: imageData,
+    isLoading: imageLoading,
+    isError: imageError,
+    refetch: refetchImage,
+  } = useFetchImageQuery(postData?.data?.data[0]?._id);
+
+  console.log(imageData);
   const [
     createPost,
     { isLoading: isCreatingPost, isError: isCreateError, error: createError },
-  ] = useCreatePostsMutation();
+  ] = useCreatePostsMutation({
+    refetchQueries: [
+      {
+        query: useFetchPostsQuery,
+        variables: {
+          page: 1,
+          perPage: 20,
+          search: "",
+          isMyPostsOnly: false,
+          isPrivate: false,
+          accessToken: getCookie("accessToken"),
+        },
+      },
+    ],
+  });
 
   const handleCreatePost = async (postData) => {
     try {
-      console.log("-----> post data", postData);
+      console.log("-----> post=data", postData);
       postData.isPrivate = false;
       const accessToken = getCookie("accessToken");
       if (authenticateToken(accessToken)) {
-        await createPost({ postData, accessToken });
+        await createPost(postData).unwrap();
         setShowModal(false);
       } else {
         console.error("Access token authentication failed");
@@ -90,10 +122,11 @@ const Home = () => {
   };
 
   useEffect(() => {
-    if (!isLoading && !isError && data) {
-      console.log("Posts data:", data.data.data);
+    if (!postLoading && !postError && postData) {
+      console.log("Posts data:", postData.data.data);
+      refetchImage(postData.data.data[0]._id);
     }
-  }, [data, isLoading, isError]);
+  }, [postData, postLoading, postError, refetchImage]);
 
   return (
     <div className={classes.root}>
@@ -113,16 +146,17 @@ const Home = () => {
         />
       )}
       <Grid container spacing={3}>
-        {data?.data?.data?.map((post) => (
+        {postData?.data?.data?.map((post) => (
           <Grid item xs={12} sm={12} md={12} key={post._id}>
             <Card className={classes.card}>
               <CardActionArea>
                 <CardMedia
                   component="img"
                   alt="Post Image"
-                  image={post.image}
+                  src={imageData?.imageData}
                   className={classes.media}
                 />
+                {console.log(imageData?.imageData)}
                 <CardContent className={classes.cardContent}>
                   <Typography gutterBottom variant="h5" component="h2">
                     {post.title}

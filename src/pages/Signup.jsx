@@ -15,10 +15,13 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
-import { useSignupMutation } from "../api/SignupApi";
+import { useSignupMutation } from "../api/authApi";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import IconButton from "@mui/material/IconButton";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 function Copyright(props) {
   return (
@@ -49,15 +52,37 @@ function SignUp() {
   };
 
   const validationSchema = Yup.object({
-    firstname: Yup.string().required("First Name is required"),
-    lastname: Yup.string().required("Last Name is required"),
-    username: Yup.string().required("Username is required"),
+    firstname: Yup.string()
+      .required("Firstname is required")
+      .min(2, "Firstname must be at least 2 characters")
+      .max(30, "Firstname must be at most 30 characters")
+      .matches(
+        /^[a-zA-Z0-9]+$/,
+        "Firstname must contain only alphanumeric characters."
+      ),
+    lastname: Yup.string()
+      .required("Lastname is required")
+      .min(2, "Lastname must be at least 2 characters")
+      .max(30, "Lastname must be at most 30 characters")
+      .matches(
+        /^[a-zA-Z0-9]+$/,
+        "Lastname must contain only alphanumeric characters."
+      ),
+    username: Yup.string()
+      .required("Username is required")
+      .min(6, "Username must be at least 6 characters")
+      .max(30, "Username must be at most 30 characters")
+      .matches(
+        /^[a-zA-Z0-9-_@.]+$/,
+        "Username must contain only alphanumeric characters and/or the following special characters: -, _, @, and ."
+      ),
     email: Yup.string()
       .email("Invalid email address")
       .required("Email is required"),
     password: Yup.string()
       .required("Password is required")
-      .min(8, "Password must be at least 8 characters long"),
+      .min(8, "The password must be at least 8 characters")
+      .max(15, "The password can be at most 15 characters"),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref("password"), null], "Passwords must match")
       .required("Please confirm your password"),
@@ -187,6 +212,13 @@ function SignUp() {
                   type={showPassword ? "text" : "password"}
                   id="password"
                   autoComplete="new-password"
+                  InputProps={{
+                    endAdornment: (
+                      <IconButton onClick={togglePasswordVisibility} edge="end">
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    ),
+                  }}
                 />
                 {errors.password && (
                   <div style={{ color: "red" }}>{errors.password.message}</div>
@@ -199,7 +231,7 @@ function SignUp() {
                   fullWidth
                   name="confirmPassword"
                   label="Confirm Password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   id="confirmPassword"
                   autoComplete="new-password"
                 />

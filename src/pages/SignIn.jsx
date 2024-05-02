@@ -12,11 +12,14 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
-import { useGetUserMutation } from "../api/SignupApi";
+import { useGetUserMutation } from "../api/authApi";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+import IconButton from "@mui/material/IconButton";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 function SignInSide() {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -29,7 +32,8 @@ function SignInSide() {
       .required("Email is required"),
     password: Yup.string()
       .required("Password is required")
-      .min(8, "Password must be at least 8 characters long"),
+      .min(8, "The password must be at least 8 characters")
+      .max(15, "The password can be at most 15 characters"),
   });
 
   const {
@@ -129,9 +133,16 @@ function SignInSide() {
                 fullWidth
                 name="password"
                 label="Password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 id="password"
                 autoComplete="current-password"
+                InputProps={{
+                  endAdornment: (
+                    <IconButton onClick={togglePasswordVisibility} edge="end">
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  ),
+                }}
               />
               {errors.password && <div>{errors.password.message}</div>}
 

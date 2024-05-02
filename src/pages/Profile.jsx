@@ -1,6 +1,6 @@
 // --------------------------------------------- edit field
 import { useState } from "react";
-import { useFetchUserQuery } from "../api/SignupApi";
+import { useFetchUserQuery } from "../api/userApi";
 import Cookies from "js-cookie";
 import Navbar from "../component/Navbar";
 import EditProfileModal from "../component/EditProfileModal";
@@ -8,14 +8,10 @@ import EditProfileModal from "../component/EditProfileModal";
 const UserProfilePage = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  const {
-    data: user,
-    isLoading,
-    isError,
-    error,
-  } = useFetchUserQuery({
-    accessToken: Cookies.get("accessToken"),
-  });
+  const { data: user, isLoading, isError, error } = useFetchUserQuery();
+  // {
+  // accessToken: Cookies.get("accessToken"),
+  // }
 
   const handleEditProfile = () => {
     setIsEditModalOpen(true);
