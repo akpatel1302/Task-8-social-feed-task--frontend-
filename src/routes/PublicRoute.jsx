@@ -1,5 +1,5 @@
 import { Outlet, Navigate } from "react-router-dom";
-
+// import useCookie from "../userContext/UserContext";
 function getCookie(cname) {
   let name = cname + "=";
   let decodedCookie = decodeURIComponent(document.cookie);
@@ -17,6 +17,8 @@ function getCookie(cname) {
 }
 
 function PublicRoutes() {
+  // const cookieValue = useCookie();
+  // const token = cookieValue.cookie;
   const token = getCookie("accessToken");
   console.log(token);
 

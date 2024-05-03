@@ -6,26 +6,7 @@ import { RouterProvider } from "react-router-dom";
 import PrivateRoute from "./routes/PrivateRoute";
 import PublicRoutes from "./routes/PublicRoute";
 import Profile from "./pages/Profile";
-import {
-  createBrowserRouter,
-  //   createRoutesFromElements,
-  //   RouterProvider,
-  //   Route,
-} from "react-router-dom";
-
-// const router = createBrowserRouter(
-//   createRoutesFromElements(
-//     <>
-//       <Route path="/" element={<PublicRoutes />}>
-//         <Route index element={<Signup />} />
-//         <Route path="/signin" element={<Signin />} />
-//       </Route>
-//       <Route path="/home" element={<PrivateRoute />}>
-//         <Route index element={<Home />} />
-//       </Route>
-//     </>
-//   )
-// );
+import { createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
   {
@@ -40,10 +21,6 @@ const router = createBrowserRouter([
         path: "/signin",
         element: <Signin />,
       },
-      // {
-      //   path: "/home",
-      //   element: <Home />,
-      // },
       {
         path: "*",
         element: <Signin />,
@@ -51,7 +28,6 @@ const router = createBrowserRouter([
     ],
   },
   {
-    // path: "/contact",
     element: <PrivateRoute />,
     children: [
       {
