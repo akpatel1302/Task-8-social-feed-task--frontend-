@@ -39,8 +39,8 @@ export const postApi = createApi({
       },
     }),
     fetchPosts: builder.query({
-      query: () => ({
-        url: "/posts/get-feed-posts?",
+      query: ({ page, perPage, search, isMyPostsOnly, isPrivate }) => ({
+        url: `/posts/get-feed-posts?page=${page}&perPage=${perPage}&search=${search}&isMyPostsOnly=${isMyPostsOnly}&isPrivate=${isPrivate}`,
         method: "GET",
       }),
     }),
