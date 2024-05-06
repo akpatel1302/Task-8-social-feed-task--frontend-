@@ -9,13 +9,12 @@ import {
   DialogContent,
   DialogTitle,
 } from "@material-ui/core";
-
+import PropTypes from "prop-types";
 const EditProfileModal = ({ user, onClose }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-    // refetch: refetchUsers,
   } = useForm({
     defaultValues: {
       firstname: user.data.firstname,
@@ -24,7 +23,7 @@ const EditProfileModal = ({ user, onClose }) => {
       email: user.data.email,
     },
   });
-  const [updateUserProfile] = useUpdateUserProfileMutation();
+  const [updateUserProfile, { isLoading }] = useUpdateUserProfileMutation();
 
   const onSubmit = async (data) => {
     try {
@@ -40,6 +39,19 @@ const EditProfileModal = ({ user, onClose }) => {
     } catch (error) {
       console.error("Error updating user profile:", error);
     }
+  };
+
+  //for validate prop
+  EditProfileModal.propTypes = {
+    user: PropTypes.shape({
+      data: PropTypes.shape({
+        firstname: PropTypes.string,
+        lastname: PropTypes.string,
+        username: PropTypes.string,
+        email: PropTypes.string,
+      }),
+    }),
+    onClose: PropTypes.func.isRequired,
   };
 
   return (
@@ -90,8 +102,8 @@ const EditProfileModal = ({ user, onClose }) => {
             margin="normal"
           />
           <DialogActions>
-            <Button type="submit" color="primary">
-              Save
+            <Button type="submit" color="primary" disabled={isLoading}>
+              {isLoading ? "Saving..." : "Save"}
             </Button>
             <Button onClick={onClose} color="primary">
               Cancel

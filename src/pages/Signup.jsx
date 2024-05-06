@@ -22,7 +22,7 @@ import "react-toastify/dist/ReactToastify.css";
 import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-
+import { CircularProgress } from "@mui/material";
 function Copyright(props) {
   return (
     <Typography
@@ -45,6 +45,8 @@ const defaultTheme = createTheme();
 
 function SignUp() {
   const navigate = useNavigate();
+  // const [loading, setLoading] = useState(false);
+
   const [showPassword, setShowPassword] = React.useState(false);
 
   const notify = (message) => {
@@ -262,7 +264,7 @@ function SignUp() {
               sx={{ mt: 3, mb: 2 }}
               disabled={isLoading}
             >
-              {isLoading ? "Loading..." : "Sign Up"}
+              {isLoading ? <CircularProgress size={24} /> : "Sign Up"}
             </Button>
             <ToastContainer />
             <Grid container justifyContent="flex-end">

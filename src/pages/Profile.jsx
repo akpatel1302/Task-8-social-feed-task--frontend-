@@ -5,21 +5,12 @@ import {
 } from "../api/userApi";
 import Navbar from "../component/Navbar";
 import EditProfileModal from "../component/EditProfileModal";
-
+import { CircularProgress } from "@material-ui/core";
 const UserProfilePage = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   // const [updateUserProfile] = useUpdateUserProfileMutation();
 
-  const {
-    data: user,
-    isLoading,
-    isError,
-    error,
-    // refetch: refetchUsers,
-  } = useFetchUserQuery();
-  // {
-  // accessToken: Cookies.get("accessToken"),
-  // }
+  const { data: user, isLoading, isError, error } = useFetchUserQuery();
 
   const handleEditProfile = () => {
     setIsEditModalOpen(true);
@@ -29,18 +20,13 @@ const UserProfilePage = () => {
     setIsEditModalOpen(false);
   };
 
-  // const handleUpdateProfile = async (updatedUserData) => {
-  //   try {
-  //     await updateUserProfile(updatedUserData).unwrap();
-  //     setIsEditModalOpen(false);
-  //     refetchUser();
-  //   } catch (error) {
-  //     console.error("Error updating user profile:", error);
-  //   }
-  // };
-
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        Loading...
+        <CircularProgress />
+      </div>
+    );
   }
 
   if (isError) {

@@ -20,9 +20,11 @@ import * as Yup from "yup";
 import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { CircularProgress } from "@mui/material";
 
 function SignInSide() {
   const [showPassword, setShowPassword] = React.useState(false);
+  // const [loading, setLoading] = React.useState(false);
   const [login, { isLoading, isError, error }] = useGetUserMutation();
   const navigate = useNavigate();
 
@@ -161,8 +163,9 @@ function SignInSide() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                disabled={isLoading}
               >
-                Sign In
+                {isLoading ? <CircularProgress size={20} /> : "Sign In"}
               </Button>
               <Grid container>
                 <Grid item xs></Grid>
