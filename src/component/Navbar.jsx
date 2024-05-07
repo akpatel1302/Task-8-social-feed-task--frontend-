@@ -1,17 +1,39 @@
 import { Link } from "react-router-dom";
-import { AppBar, Toolbar, Typography, Button } from "@material-ui/core";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  IconButton,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import InstagramIcon from "@mui/icons-material/Instagram";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    // width: "100%",
+  },
+  appBar: {
+    background: "linear-gradient(to right, #8E2DE2, #4A00E0)",
+    boxShadow: "none",
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
   },
   title: {
     flexGrow: 1,
     textAlign: "left",
+    [theme.breakpoints.down("xs")]: {
+      flexGrow: 0,
+    },
+  },
+  linkButton: {
+    marginLeft: theme.spacing(2),
+    [theme.breakpoints.down("xs")]: {
+      display: "none",
+    },
   },
 }));
 
@@ -29,18 +51,40 @@ const Navbar = () => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
+          <IconButton
+            edge="start"
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="menu"
+          >
+            <InstagramIcon />
+          </IconButton>
           <Typography variant="h6" className={classes.title}>
-            Instagram Clone
+            Instagram clone
           </Typography>
-          <Button color="inherit" component={Link} to="/home">
+          <Button
+            color="inherit"
+            component={Link}
+            to="/home"
+            className={classes.linkButton}
+          >
             Home
           </Button>
-          <Button color="inherit" component={Link} to="/profile">
+          <Button
+            color="inherit"
+            component={Link}
+            to="/profile"
+            className={classes.linkButton}
+          >
             Profile
           </Button>
-          <Button color="inherit" onClick={handleLogout}>
+          <Button
+            color="inherit"
+            onClick={handleLogout}
+            className={classes.linkButton}
+          >
             Logout
           </Button>
         </Toolbar>

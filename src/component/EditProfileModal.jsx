@@ -56,7 +56,6 @@ const EditProfileModal = ({ user, onClose }) => {
 
   return (
     <Modal open={true} onClose={onClose}>
-      <DialogTitle>Edit Profile</DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextField
