@@ -5,10 +5,32 @@ import {
 } from "../api/userApi";
 import Navbar from "../component/Navbar";
 import EditProfileModal from "../component/EditProfileModal";
-import { CircularProgress, makeStyles } from "@material-ui/core";
+import {
+  CircularProgress,
+  Typography,
+  Button,
+  Grid,
+  Paper,
+  makeStyles,
+  Avatar,
+} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
-  edit: {
+  profileContainer: {
+    padding: theme.spacing(4),
+    justifyContent: "center",
+  },
+  profilePaper: {
+    padding: theme.spacing(4),
+    // marginBottom: theme.spacing(4),
+  },
+  avatar: {
+    width: theme.spacing(12),
+    height: theme.spacing(12),
+    marginBottom: theme.spacing(2),
+  },
+  editButton: {
+    marginTop: theme.spacing(2),
     background: "linear-gradient(to right, #8E2DE2, #4A00E0)",
   },
 }));
@@ -31,6 +53,7 @@ const UserProfilePage = () => {
   if (isLoading) {
     return (
       <div>
+        <Navbar />
         <CircularProgress />
       </div>
     );
@@ -39,6 +62,7 @@ const UserProfilePage = () => {
   if (isError) {
     return (
       <div>
+        <Navbar />
         <h2>Error Fetching User Data</h2>
         <p>{error.message}</p>
       </div>
@@ -48,6 +72,7 @@ const UserProfilePage = () => {
   if (!user) {
     return (
       <div>
+        <Navbar />
         <h2>User Not Found</h2>
       </div>
     );
@@ -56,19 +81,43 @@ const UserProfilePage = () => {
   return (
     <>
       <Navbar />
-      <div>
-        <h2>User Profile</h2>
-        <p>First Name: {user.data.firstname}</p>
-        <p>Last Name: {user.data.lastname}</p>
-        <p>Username: {user.data.username}</p>
-        <p>Email: {user.data.email}</p>
-        <button className={classes.edit} onClick={handleEditProfile}>
-          Edit Profile
-        </button>
-        {isEditModalOpen && (
-          <EditProfileModal user={user} onClose={handleCloseEditModal} />
-        )}
-      </div>
+      <Grid container className={classes.profileContainer}>
+        <Grid item xs={12} sm={8} md={6}>
+          <Paper elevation={12} className={classes.profilePaper}>
+            <Grid container spacing={3} alignItems="center">
+              <Grid item xs={12} align="center">
+                <Avatar
+                  alt="Profile Picture"
+                  src={user.data.profilePicture}
+                  className={classes.avatar}
+                />
+                <Typography variant="h5">{`${user.data.firstname} ${user.data.lastname}`}</Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="subtitle1">
+                  Username: {user.data.username}
+                </Typography>
+                <Typography variant="subtitle1">
+                  Email: {user.data.email}
+                </Typography>
+              </Grid>
+              <Grid item xs={12} align="center">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleEditProfile}
+                  className={classes.editButton}
+                >
+                  Edit Profile
+                </Button>
+              </Grid>
+            </Grid>
+          </Paper>
+          {isEditModalOpen && (
+            <EditProfileModal user={user} onClose={handleCloseEditModal} />
+          )}
+        </Grid>
+      </Grid>
     </>
   );
 };

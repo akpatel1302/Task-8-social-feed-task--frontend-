@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
     },
+    border: "1px solid grey",
   },
   pagination: {
     marginTop: theme.spacing(2),
