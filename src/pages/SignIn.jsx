@@ -140,24 +140,17 @@ function SignInSide() {
                 autoComplete="current-password"
                 InputProps={{
                   endAdornment: (
-                    <IconButton onClick={togglePasswordVisibility} edge="end">
+                    <IconButton
+                      onClick={togglePasswordVisibility}
+                      edge="end"
+                      style={{ outline: "none" }}
+                    >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   ),
                 }}
               />
               {errors.password && <div>{errors.password.message}</div>}
-
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    value="allowExtraEmails"
-                    color="primary"
-                    onClick={togglePasswordVisibility}
-                  />
-                }
-                label="Show Password"
-              />
               <Button
                 type="submit"
                 fullWidth

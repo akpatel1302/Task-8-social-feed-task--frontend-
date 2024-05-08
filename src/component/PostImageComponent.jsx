@@ -31,7 +31,8 @@ const PostCard = ({ post }) => {
     },
     media: {
       height: 200,
-      objectFit: "cover",
+      objectFit: "contain",
+      cursor: "default",
     },
     actionArea: {
       padding: theme.spacing(2),

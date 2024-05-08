@@ -7,11 +7,12 @@ import {
   DialogTitle,
   TextField,
   CircularProgress,
+  Grid,
 } from "@material-ui/core";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import PropTypes from "prop-types";
-
+import DeleteIcon from "@mui/icons-material/Delete";
 const schema = yup.object().shape({
   title: yup.string().required("Title is required"),
 });
@@ -42,6 +43,10 @@ const CreatePostModal = ({ onClose, onSubmit }) => {
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     setSelectedImage(file);
+  };
+
+  const handleRemoveImage = () => {
+    setSelectedImage(null);
   };
 
   CreatePostModal.propTypes = {
@@ -78,6 +83,27 @@ const CreatePostModal = ({ onClose, onSubmit }) => {
             {...register("image")}
             onChange={handleImageUpload}
           />
+          {selectedImage && (
+            <Grid
+              container
+              spacing={2}
+              alignItems="center"
+              style={{ marginTop: 16 }}
+            >
+              <Grid item>
+                <img
+                  src={URL.createObjectURL(selectedImage)}
+                  alt="Selected"
+                  style={{ maxWidth: 100, maxHeight: 100 }}
+                />
+              </Grid>
+              <Grid item>
+                <Button color="secondary" onClick={handleRemoveImage}>
+                  <DeleteIcon />
+                </Button>
+              </Grid>
+            </Grid>
+          )}
           <Button
             type="submit"
             color="primary"

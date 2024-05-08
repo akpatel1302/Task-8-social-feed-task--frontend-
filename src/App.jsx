@@ -1,4 +1,4 @@
-import Home from "@pages/Home";
+import Home from "./pages/Home";
 import "./App.css";
 import Signin from "./pages/SignIn";
 import Signup from "./pages/Signup";

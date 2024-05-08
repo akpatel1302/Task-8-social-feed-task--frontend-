@@ -1,10 +1,10 @@
-import { Dialog, DialogContent, DialogTitle } from "@material-ui/core";
+import { Dialog, DialogContent } from "@material-ui/core";
 import PropTypes from "prop-types";
 
 const Modal = ({ children, open, onClose }) => {
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Edit Profile</DialogTitle>
+      {/* <DialogTitle>Edit Profile</DialogTitle> */}
       <DialogContent>{children}</DialogContent>
     </Dialog>
   );

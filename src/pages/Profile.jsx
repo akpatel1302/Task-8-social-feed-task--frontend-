@@ -5,8 +5,16 @@ import {
 } from "../api/userApi";
 import Navbar from "../component/Navbar";
 import EditProfileModal from "../component/EditProfileModal";
-import { CircularProgress } from "@material-ui/core";
+import { CircularProgress, makeStyles } from "@material-ui/core";
+
+const useStyles = makeStyles((theme) => ({
+  edit: {
+    background: "linear-gradient(to right, #8E2DE2, #4A00E0)",
+  },
+}));
+
 const UserProfilePage = () => {
+  const classes = useStyles();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   // const [updateUserProfile] = useUpdateUserProfileMutation();
 
@@ -23,7 +31,6 @@ const UserProfilePage = () => {
   if (isLoading) {
     return (
       <div>
-        Loading...
         <CircularProgress />
       </div>
     );
@@ -55,7 +62,9 @@ const UserProfilePage = () => {
         <p>Last Name: {user.data.lastname}</p>
         <p>Username: {user.data.username}</p>
         <p>Email: {user.data.email}</p>
-        <button onClick={handleEditProfile}>Edit Profile</button>
+        <button className={classes.edit} onClick={handleEditProfile}>
+          Edit Profile
+        </button>
         {isEditModalOpen && (
           <EditProfileModal user={user} onClose={handleCloseEditModal} />
         )}

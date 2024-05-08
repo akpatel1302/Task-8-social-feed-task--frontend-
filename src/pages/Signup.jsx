@@ -216,7 +216,11 @@ function SignUp() {
                   autoComplete="new-password"
                   InputProps={{
                     endAdornment: (
-                      <IconButton onClick={togglePasswordVisibility} edge="end">
+                      <IconButton
+                        onClick={togglePasswordVisibility}
+                        style={{ outline: "none" }}
+                        edge="end"
+                      >
                         {showPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
                     ),
@@ -243,18 +247,7 @@ function SignUp() {
                   </div>
                 )}
               </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      value="allowExtraEmails"
-                      color="primary"
-                      onClick={togglePasswordVisibility}
-                    />
-                  }
-                  label="Show Password"
-                />
-              </Grid>
+              <Grid item xs={12}></Grid>
             </Grid>
             <Button
               type="submit"
