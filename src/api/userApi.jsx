@@ -30,12 +30,9 @@ export const userApi = createApi({
         try {
           const { data: updatedUser } = await queryFulfilled;
           dispatch(
-            userApi.util.updateQueryData(
-              "fetchUser",
-              undefined,
-              (draft) => {
-                Object.assign(draft, updatedUser);
-              })
+            userApi.util.updateQueryData("fetchUser", undefined, (draft) => {
+              Object.assign(draft, updatedUser);
+            })
           );
         } catch (error) {
           console.error("Error updating user profile cache:", error);

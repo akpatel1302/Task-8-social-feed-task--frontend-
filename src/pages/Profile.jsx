@@ -86,11 +86,7 @@ const UserProfilePage = () => {
           <Paper elevation={12} className={classes.profilePaper}>
             <Grid container spacing={3} alignItems="center">
               <Grid item xs={12} align="center">
-                <Avatar
-                  alt="Profile Picture"
-                  src={user.data.profilePicture}
-                  className={classes.avatar}
-                />
+                <Avatar alt="Profile Picture" className={classes.avatar} />
                 <Typography variant="h5">{`${user.data.firstname} ${user.data.lastname}`}</Typography>
               </Grid>
               <Grid item xs={12}>

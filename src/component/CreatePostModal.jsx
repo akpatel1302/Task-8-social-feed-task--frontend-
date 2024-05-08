@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import PropTypes from "prop-types";
 import DeleteIcon from "@mui/icons-material/Delete";
 const schema = yup.object().shape({
@@ -19,7 +20,7 @@ const schema = yup.object().shape({
 
 const CreatePostModal = ({ onClose, onSubmit }) => {
   const { register, handleSubmit, errors } = useForm({
-    validationSchema: schema,
+    resolver: yupResolver(schema),
   });
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -63,7 +64,7 @@ const CreatePostModal = ({ onClose, onSubmit }) => {
             label="Title"
             name="title"
             {...register("title")}
-            error={!!errors?.title}
+            error={errors?.title}
             helperText={errors?.title && errors?.title.message}
             fullWidth
             margin="normal"

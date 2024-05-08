@@ -10,6 +10,7 @@ import {
   CardActionArea,
   CardMedia,
   makeStyles,
+  Avatar,
 } from "@material-ui/core";
 import { useFetchImageQuery } from "../api/postApi";
 const PostCard = ({ post }) => {
@@ -30,12 +31,17 @@ const PostCard = ({ post }) => {
       marginBottom: theme.spacing(2),
     },
     media: {
-      height: 200,
+      height: 500,
       objectFit: "contain",
       cursor: "default",
     },
     actionArea: {
       padding: theme.spacing(2),
+    },
+    avatar: {
+      width: theme.spacing(6),
+      height: theme.spacing(6),
+      marginRight: theme.spacing(1),
     },
   }));
   const classes = useStyles();
@@ -51,10 +57,23 @@ const PostCard = ({ post }) => {
   return (
     <Grid item xs={12} sm={12} md={12} key={post._id}>
       <Card className={classes.card}>
-        <CardActionArea>
+        <CardActionArea className={classes.actionArea}>
           {/* <Typography gutterBottom variant="h5" component="h2">
             {post.userData.username}
           </Typography> */}
+          {/* <Grid container alignItems="center">
+            <Grid item>
+              <Avatar
+                alt="Profile Picture"
+                className={classes.avatar}
+              />
+            </Grid>
+            <Grid item>
+              <Typography gutterBottom variant="subtitle1" component="h2">
+                {post.userData.username}
+              </Typography>
+            </Grid>
+          </Grid> */}
           <CardMedia
             component="img"
             alt="Post Image"

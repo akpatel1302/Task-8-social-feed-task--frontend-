@@ -35,11 +35,12 @@ const useStyles = makeStyles((theme) => ({
   card: {
     marginBottom: theme.spacing(2),
     backgroundColor: theme.palette.background.default,
+    borderRadius: theme.spacing(2), // Adding border radius
+    border: "1px solid #e0e0e0", // Adding border
     transition: "box-shadow 0.3s ease-in-out",
     "&:hover": {
       boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
     },
-    border: "1px solid grey",
   },
   pagination: {
     marginTop: theme.spacing(2),
@@ -139,11 +140,13 @@ const Home = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
+
           <Switch
             {...label}
             checked={isMyPostsOnly}
             onChange={handleToggleMyPostsOnly}
           />
+          <Typography variant="p">MyPosts</Typography>
         </div>
         <Button
           variant="contained"
