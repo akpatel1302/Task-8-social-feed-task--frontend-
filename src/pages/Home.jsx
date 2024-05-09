@@ -59,7 +59,7 @@ const Home = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
-  const [isMyPostsOnly, setIsMyPostsOnly] = useState(false);
+  const [isMyPostsOnly, setIsMyPostsOnly] = useState("");
   const cookieValue = useCookie();
   const classes = useStyles();
   const [showModal, setShowModal] = useState(false);
@@ -133,7 +133,7 @@ const Home = () => {
   //   }
   // };
   const handleToggleMyPostsOnly = () => {
-    setIsMyPostsOnly(!isMyPostsOnly);
+    setIsMyPostsOnly((prev) => (prev === "on" ? "" : "on"));
   };
 
   console.log(isMyPostsOnly);
