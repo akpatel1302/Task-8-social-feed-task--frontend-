@@ -1,5 +1,17 @@
+import React from "react";
 import { Link } from "react-router-dom";
-import { AppBar, Toolbar, Typography, Button, Icon } from "@material-ui/core";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Icon,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
@@ -38,13 +50,20 @@ const useStyles = makeStyles((theme) => ({
 const Navbar = () => {
   const classes = useStyles();
   const navigate = useNavigate();
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleLogout = () => {
-    const validate = window.confirm("Are you sure you want to logout?");
-    if (validate) {
-      Cookies.remove("accessToken");
-      navigate("/login");
-    }
+    handleClose();
+    Cookies.remove("accessToken");
+    navigate("/login");
   };
 
   return (
@@ -86,13 +105,29 @@ const Navbar = () => {
           </Button>
           <Button
             color="inherit"
-            onClick={handleLogout}
+            onClick={handleOpen}
             className={classes.linkButton}
           >
             Logout
           </Button>
         </Toolbar>
       </AppBar>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Logout</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to logout?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleLogout} color="primary">
+            Logout
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

@@ -44,6 +44,7 @@ export const postApi = createApi({
         method: "GET",
       }),
     }),
+
     fetchImage: builder.query({
       query: (postId) => ({
         url: `/posts/get-feed-image?postId=${postId}`,

@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
   search: {
     marginBottom: theme.spacing(2),
+    width: "100%",
   },
   createPostButton: {
     marginBottom: theme.spacing(2),
@@ -104,6 +105,7 @@ const Home = () => {
     () =>
       debounce((value) => {
         setDebouncedSearch(value);
+        setPage(1);
       }, 1000),
     []
   );
@@ -123,16 +125,26 @@ const Home = () => {
     }
   }, [postData]);
 
+  // const handleToggleMyPostsOnly = () => {
+  //   if (isMyPostsOnly == "on") {
+  //     setIsMyPostsOnly(false);
+  //   } else {
+  //     setIsMyPostsOnly("on");
+  //   }
+  // };
   const handleToggleMyPostsOnly = () => {
     setIsMyPostsOnly(!isMyPostsOnly);
   };
+
+  console.log(isMyPostsOnly);
 
   return (
     <>
       <Navbar />
       <div className={classes.root}>
-        <div style={{ display: "flex" }}>
+        <div className={classes.search} style={{ display: "flex" }}>
           <TextField
+            position="fixed"
             className={classes.search}
             label="Search"
             variant="standard"
@@ -146,7 +158,7 @@ const Home = () => {
             checked={isMyPostsOnly}
             onChange={handleToggleMyPostsOnly}
           />
-          <Typography variant="p">MyPosts</Typography>
+          <Typography variant="body2">MyPosts</Typography>
         </div>
         <Button
           variant="contained"

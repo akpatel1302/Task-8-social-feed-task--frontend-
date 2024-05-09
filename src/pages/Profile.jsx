@@ -19,9 +19,11 @@ const useStyles = makeStyles((theme) => ({
   profileContainer: {
     padding: theme.spacing(4),
     justifyContent: "center",
+    marginTop: theme.spacing(6),
   },
   profilePaper: {
     padding: theme.spacing(4),
+
     // marginBottom: theme.spacing(4),
   },
   avatar: {

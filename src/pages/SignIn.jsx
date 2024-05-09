@@ -124,7 +124,9 @@ function SignInSide() {
                 autoComplete="email"
                 autoFocus
               />
-              {errors.email && <div>{errors.email.message}</div>}
+              {errors.email && (
+                <div style={{ color: "red" }}>{errors.email.message}</div>
+              )}
 
               <TextField
                 {...register("password")}
@@ -148,7 +150,9 @@ function SignInSide() {
                   ),
                 }}
               />
-              {errors.password && <div>{errors.password.message}</div>}
+              {errors.password && (
+                <div style={{ color: "red" }}>{errors.password.message}</div>
+              )}
               <Button
                 type="submit"
                 fullWidth
