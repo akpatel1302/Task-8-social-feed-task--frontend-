@@ -24,7 +24,7 @@ export const postApi = createApi({
                 page: 1,
                 perPage: 20,
                 search: "",
-                isMyPostsOnly: false,
+                isMyPostsOnly: "",
                 isPrivate: false,
               },
               (draft) => {
