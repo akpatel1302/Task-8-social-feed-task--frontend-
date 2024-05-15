@@ -204,7 +204,7 @@
 // };
 
 // export default Home;
-// -------------------------------------------------------------------------------------
+// --------------------------infinite scroll success-----------------------------------------------------------
 // import { useState, useEffect, useMemo, useRef } from "react";
 // import useCookie from "../userContext/UserContext";
 // import { useFetchPostsQuery, useCreatePostsMutation } from "../api/postApi";
@@ -465,9 +465,8 @@ const Home = () => {
   const cookieValue = useCookie();
   const classes = useStyles();
   const [showModal, setShowModal] = useState(false);
-  const lastPostRef = useRef(null);
+  const observerRef = useRef(null);
   const [posts, setPosts] = useState([]);
-  const [isFetching, setIsFetching] = useState(false);
 
   const { data: postData, isLoading: postsLoading } = useFetchPostsQuery({
     page: page,
@@ -524,44 +523,33 @@ const Home = () => {
     if (postData && page >= 1) {
       setPosts((prevPosts) => [...prevPosts, ...postData.data.data]);
     } else {
-      setPosts(postData?.data?.data || []); // Ensure posts is an array even if data is null
+      setPosts(postData?.data?.data || []);
     }
   }, [postData]);
-
-  useEffect(() => {
-    if (!postsLoading) {
-      setIsFetching(false);
-    }
-  }, [postsLoading]);
 
   const handleToggleMyPostsOnly = () => {
     setIsMyPostsOnly((prev) => (prev === "on" ? "" : "on"));
     setPage(0);
   };
 
-  const handleScroll = () => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop ===
-        document.documentElement.offsetHeight &&
-      !postsLoading &&
-      !isFetching
-    ) {
-      setIsFetching(true);
-    }
-  };
+  function useIsVisible(ref, rootMargin = "0px") {
+    const [isVisble, setIsvisible] = useState(false);
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [postsLoading, isFetching]);
+    useEffect(() => {
+      const observer = new IntersectionObserver(
+        ([observerEntry]) => {
+          setIsvisible(observerEntry.isIntersecting);
+        },
+        { rootMargin }
+      );
 
-  useEffect(() => {
-    if (isFetching) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  }, [isFetching]);
+      if (ref.current !== null) observer.observe(ref.current);
+
+      return () => observer.disconnect();
+    }, [ref, rootMargin]);
+
+    return isVisble;
+  }
 
   return (
     <>
@@ -599,24 +587,17 @@ const Home = () => {
             onSubmit={handleCreatePost}
           />
         )}
-        {console.log(posts?.length)}
-        {posts?.length > 0 ? (
-          <>
-            {posts.map((post, index) => (
-              <Card
-                key={post.id}
-                className={classes.card}
-                ref={index === posts?.length - 1 ? lastPostRef : null}
-              >
-                <CardContent>
-                  <PostCard post={post} />
-                </CardContent>
-              </Card>
-            ))}
-          </>
-        ) : (
-          <Typography variant="body1">No posts found</Typography>
-        )}
+        {posts.map((post, index) => (
+          <Card
+            key={post.id}
+            className={classes.card}
+            ref={index === posts.length - 1 ? observerRef : null}
+          >
+            <CardContent>
+              <PostCard post={post} />
+            </CardContent>
+          </Card>
+        ))}
         {postsLoading && <CircularProgress />}
       </div>
     </>
