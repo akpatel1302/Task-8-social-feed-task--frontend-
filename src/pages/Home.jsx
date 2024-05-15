@@ -467,6 +467,7 @@ const Home = () => {
   const [showModal, setShowModal] = useState(false);
   const lastPostRef = useRef(null);
   const [posts, setPosts] = useState([]);
+  const [isFetching, setIsFetching] = useState(false);
 
   const { data: postData, isLoading: postsLoading } = useFetchPostsQuery({
     page: page,
@@ -527,13 +528,25 @@ const Home = () => {
     }
   }, [postData]);
 
+  useEffect(() => {
+    if (!postsLoading) {
+      setIsFetching(false);
+    }
+  }, [postsLoading]);
+
+  const handleToggleMyPostsOnly = () => {
+    setIsMyPostsOnly((prev) => (prev === "on" ? "" : "on"));
+    setPage(0);
+  };
+
   const handleScroll = () => {
     if (
       window.innerHeight + document.documentElement.scrollTop ===
         document.documentElement.offsetHeight &&
-      !postsLoading
+      !postsLoading &&
+      !isFetching
     ) {
-      setPage((prevPage) => prevPage + 1);
+      setIsFetching(true);
     }
   };
 
@@ -542,16 +555,13 @@ const Home = () => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [postsLoading]);
+  }, [postsLoading, isFetching]);
 
-  const handleToggleMyPostsOnly = () => {
-    setIsMyPostsOnly((prev) => (prev === "on" ? "" : "on"));
-    setPage(0);
-  };
-
-  // useEffect(() => {
-  //   const observer = new IntersectionObserver();
-  // }, []);
+  useEffect(() => {
+    if (isFetching) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  }, [isFetching]);
 
   return (
     <>
