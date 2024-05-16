@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
-import React from "react";
+import React, { useRef } from "react";
 import {
   Grid,
   Card,
@@ -13,6 +13,8 @@ import {
   Avatar,
 } from "@material-ui/core";
 import { useFetchImageQuery } from "../api/postApi";
+import useIsVisible from "./VirtualScroll";
+
 const PostCard = ({ post }) => {
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -51,17 +53,21 @@ const PostCard = ({ post }) => {
     isError: imageError,
     refetch: refetchImage,
   } = useFetchImageQuery(post._id);
-  // console.log(imageData)
-  // post._id
+
+  
+
+  const PostRef = useRef();
+  const postsss = useIsVisible(PostRef);
 
   return (
-    <Grid item xs={12} sm={12} md={12} key={post._id}>
-      <Card className={classes.card}>
-        <CardActionArea className={classes.actionArea}>
-          {/* <Typography gutterBottom variant="h5" component="h2">
+    <Grid ref={PostRef} item xs={12} sm={12} md={12} key={post._id}>
+      {postsss && (
+        <Card className={classes.card}>
+          <CardActionArea className={classes.actionArea}>
+            {/* <Typography gutterBottom variant="h5" component="h2">
             {post.userData.username}
           </Typography> */}
-          {/* <Grid container alignItems="center">
+            {/* <Grid container alignItems="center">
             <Grid item>
               <Avatar
                 alt="Profile Picture"
@@ -74,22 +80,23 @@ const PostCard = ({ post }) => {
               </Typography>
             </Grid>
           </Grid> */}
-          <CardMedia
-            component="img"
-            alt="Post Image"
-            src={imageData?.imageData}
-            className={classes.media}
-          />
-          <CardContent className={classes.cardContent}>
-            <Typography gutterBottom variant="h5" component="h2">
-              {post.title}
-            </Typography>
-            <Typography gutterBottom variant="body2" component="p">
-              {post.description}
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-      </Card>
+            <CardMedia
+              component="img"
+              alt="Post Image"
+              src={imageData?.imageData}
+              className={classes.media}
+            />
+            <CardContent className={classes.cardContent}>
+              <Typography gutterBottom variant="h5" component="h2">
+                {post.title}
+              </Typography>
+              <Typography gutterBottom variant="body2" component="p">
+                {post.description}
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      )}
     </Grid>
   );
 };
